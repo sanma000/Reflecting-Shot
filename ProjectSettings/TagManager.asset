@@ -7,11 +7,12 @@ TagManager:
   - Crate
   - Dirt
   - CinemachineTarget
+  - Environment
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Field
   - Water
   - UI
   - 
