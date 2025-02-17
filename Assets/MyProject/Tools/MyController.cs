@@ -19,10 +19,10 @@ namespace Assets
         public GameObject character;
         PlayerController Controller;
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
+        public float MoveSpeed = 1.5f;
 
         [Tooltip("Sprint speed of the character in m/s")]
-        public float SprintSpeed = 5.335f;
+        public float SprintSpeed = 4f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -197,7 +197,8 @@ namespace Assets
             else if(!stateInfo.IsName("Charge")&Charging)
             {
                 Charging = false;
-                GameObject bullet = Instantiate(bulletPrefab, gunob.transform.position, gunob.transform.rotation);
+                Debug.Log(gunob.transform.position);
+                GameObject bullet = Instantiate(bulletPrefab, gunob.transform.position, Camera.main.transform.rotation);
                 gunob.GetComponent<MuzzleFlashController>().ChargeStop();
             }
         }
@@ -207,6 +208,7 @@ namespace Assets
             // set sphere position, with offset
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
+            
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
@@ -323,6 +325,7 @@ namespace Assets
                 {
                     _animator.SetFloat("Speed", 0);
                     _animator.SetBool("Aiming", true);
+                    CinemachineCameraTarget.transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0.0f);
                     camerafps.Priority = 100;
                 }
                 else

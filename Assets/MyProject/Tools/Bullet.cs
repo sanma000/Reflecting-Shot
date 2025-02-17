@@ -7,12 +7,17 @@ public class Bullet : MonoBehaviour
     public int maxBounces = 3;
     public float range = 100f;
     public LayerMask reflayer;
-    public LineRenderer lineRenderer;
+    public GameObject particle;
+    private LineRenderer lineRenderer;
+    private AudioSource DestroySound;
     void Start()
     {
         List<Vector3> points = new List<Vector3>();
         Vector3 direction = transform.forward;
         Vector3 position = transform.position;
+
+        lineRenderer = GetComponent<LineRenderer>();
+        DestroySound = GetComponent<AudioSource>();
 
         points.Add(position);
 
@@ -23,8 +28,10 @@ public class Bullet : MonoBehaviour
             {
                 points.Add(hit.point);
 
-                if (hit.collider.CompareTag("Environment"))
+                if (hit.collider.CompareTag("Enemy"))
                 {
+                    Instantiate(particle, hit.point, Quaternion.identity);
+                    DestroySound.PlayOneShot(DestroySound.clip);
                     Destroy(hit.collider.gameObject);
                     break;
                 }
@@ -40,13 +47,15 @@ public class Bullet : MonoBehaviour
         }
 
         DrawLaser(points);
-        Destroy(gameObject, 0.1f);
+        Destroy(gameObject, 0.2f);
     }
 
     // Update is called once per frame
+    
     void DrawLaser(List<Vector3> points)
     {
         lineRenderer.positionCount = points.Count;
         lineRenderer.SetPositions(points.ToArray());
     }
+    
 }
